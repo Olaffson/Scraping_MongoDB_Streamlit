@@ -1,0 +1,15 @@
+Content-Type: text/html
+Server: Server
+Date: Wed, 19 Apr 2023 09:33:52 GMT
+X-Amz-Rid: 6Y7A279FRMK1SQYPQYX1
+Vary: Content-Type,Accept-Encoding,User-Agent
+Last-Modified: Tue, 14 Mar 2023 06:53:47 GMT
+Etag: "1fee-5f6d6b06e34c0-gzip"
+Accept-Ranges: bytes
+Content-Encoding: gzip
+Strict-Transport-Security: max-age=47474747; includeSubDomains; preload
+X-Cache: Error from cloudfront
+Via: 1.1 4bc6e08d9495b312ae3b91e801107f80.cloudfront.net (CloudFront)
+X-Amz-Cf-Pop: CDG50-P4
+Alt-Svc: h3=":443"; ma=86400
+X-Amz-Cf-Id: fnP-BQo4AZktUDgDOc7JNTqFMeWsAUn90tTOLFyX7ZWbD2lNm6nNtw==
