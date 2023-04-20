@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 import os
 import streamlit as st
 from fonctions_streamlit import film_le_plus_long, cinq_films_mieux_notes, get_acteurs, nb_films_acteur
-from fonctions_streamlit import trois_meilleurs_films_genre, get_genres
+from fonctions_streamlit import trois_meilleurs_films_genre, get_genres, duree_moyenne_genre
 
 # se connecter à la base de données MongoDB
 load_dotenv()
@@ -35,24 +35,28 @@ if acteur_selectionne:
     st.write(acteur_selectionne, 'a joué dans', nb_films, 'films')
 
 
-# Affichage pour trouver les 3 meilleurs films par genre
-st.title("Trouver les 3 meilleurs films par genre :")
-genre = get_genres()
-# selected_genre = st.selectbox("Sélectionnez un genre :", genre)
+# # Affichage pour trouver les 3 meilleurs films par genre
+# st.title("Trouver les 3 meilleurs films par genre :")
+# genre = get_genres()
 
+# selected_genre = st.selectbox("Sélectionnez un genre", genre)
 # if selected_genre:
-#     list_film = trois_meilleurs_films_genre(selected_genre)
-#     for i, film in list_film:
+#     films = trois_meilleurs_films_genre(genre)
+#     st.write(f"Les trois meilleurs films du genre {genre} sont :")
+#     for i, film in enumerate(films):
 #         st.write(f"{i+1}. {film}")
+# else:
+#     st.write("Sélectionnez un genre dans la liste.")
 
-selected_genre = st.selectbox("Sélectionnez un genre", genre)
-if selected_genre:
-    films = trois_meilleurs_films_genre(genre)
-    st.write(f"Les trois meilleurs films du genre {genre} sont :")
-    for i, film in enumerate(films):
-        st.write(f"{i+1}. {film}")
-else:
-    st.write("Sélectionnez un genre dans la liste.")
+
+# Affichage dans Streamlit
+st.title("Durée moyenne des films par genre")
+genres = collection.distinct('genre') # Liste des genres à afficher
+for genre in genres:
+    moyenne = duree_moyenne_genre(genre)
+    st.write(f"Pour le genre {genre}, la durée moyenne est de {moyenne} minutes.")
+
+
 
 
 # st.title("BDD avec pandas :")

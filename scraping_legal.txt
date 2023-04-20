@@ -1,0 +1,19 @@
+france jurisprudence 2010 ryanair/opodo
+pays-bas 2013 gaspedaal/autotrack
+pays-bas 2013 innoweb/wegener
+
+conditions générales
+propriété intellectuelle
+
+Ces deux exemples montrent qu’une analyse plus profonde et 
+contextuelle est nécessaire avant de statuer sur l’illégalité du scraping.
+
+Il convient néanmoins de noter que, dans les deux cas, 
+c’est la publication des données scrapées qui pose problème. 
+L’action de scraping n’est pas directement mise en cause.
+
+L’activité de scraping n’a donc rien d’illégal, 
+en revanche la réutilisation des données scrapées, 
+telles quelles ou après transformation mineure, 
+présente des risques plus importants et 
+doit faire l’objet d’une étude juridique fine axée sur le niveau de transformation des données collectées.

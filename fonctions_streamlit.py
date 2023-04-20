@@ -48,15 +48,23 @@ def get_genres():
     return genre
 
 
+# # Fonction pour trouver la durée moyenne d'un film pour un genre donné
+# def duree_moyenne_genre(genre):
+#     result = collection.aggregate([
+#         {'$match': {'genres': {'$regex': genre, '$options': 'i'}}},
+#         {'$group': {'_id': '$genres', 'duree_moyenne': {'$avg': '$duree'}}}
+#     ])
+#     for r in result:
+#         return r['duree_moyenne']
+
 # Fonction pour trouver la durée moyenne d'un film pour un genre donné
 def duree_moyenne_genre(genre):
     result = collection.aggregate([
-        {'$match': {'genres': {'$regex': genre, '$options': 'i'}}},
-        {'$group': {'_id': '$genres', 'duree_moyenne': {'$avg': '$duree'}}}
+        {'$match': {'genre': {'$in': [genre]}}},
+        {'$group': {'_id': '$genre', 'duree_moyenne': {'$avg': '$duree'}}}
     ])
     for r in result:
         return r['duree_moyenne']
-
 
 
 
