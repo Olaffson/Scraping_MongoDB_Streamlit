@@ -14,6 +14,7 @@ def film_le_plus_long():
         return r['titre']
 
 
+
 # Fonction pour trouver les 5 films les mieux notés
 def cinq_films_mieux_notes():
     result = collection.find().sort('score', pymongo.DESCENDING).limit(5)
@@ -21,6 +22,7 @@ def cinq_films_mieux_notes():
     for r in result:
         films.append(r['titre'])
     return films
+
 
 
 # Fonction pour trouver le nombre de films dans lesquels un acteur a joué
@@ -33,6 +35,7 @@ def nb_films_acteur(acteur):
 def get_acteurs():
     result = collection.distinct('acteurs')
     return result
+
 
 
 # Fonction pour trouver les trois meilleurs films d'un genre donné
@@ -48,14 +51,6 @@ def get_genres():
     return genre
 
 
-# # Fonction pour trouver la durée moyenne d'un film pour un genre donné
-# def duree_moyenne_genre(genre):
-#     result = collection.aggregate([
-#         {'$match': {'genres': {'$regex': genre, '$options': 'i'}}},
-#         {'$group': {'_id': '$genres', 'duree_moyenne': {'$avg': '$duree'}}}
-#     ])
-#     for r in result:
-#         return r['duree_moyenne']
 
 # Fonction pour trouver la durée moyenne d'un film pour un genre donné
 def duree_moyenne_genre(genre):
@@ -65,6 +60,27 @@ def duree_moyenne_genre(genre):
     ])
     for r in result:
         return r['duree_moyenne']
+
+
+
+# Fonction pour trouver un film par le titre
+def chercher_film(titre):
+    """
+    Fonction qui permet de récupérer les informations d'un film à partir de son titre.
+    """
+    result = collection.find_one({"titre": titre})
+    return result
+
+
+
+# Fonction pour trouver un film par acteur
+def chercher_acteurs(acteurs):
+    """
+    Fonction qui permet de récupérer les informations d'un film à partir d un acteur.
+    """
+    result = collection.find_one({"acteurs": acteurs})
+    return result
+
 
 
 
