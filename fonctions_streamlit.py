@@ -90,4 +90,3 @@ ATLAS_KEY=os.getenv('ATLAS_KEY')
 client = MongoClient(ATLAS_KEY)
 db_film = client['myfilms']
 collection = db_film["film_table"]
-

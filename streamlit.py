@@ -43,6 +43,7 @@ for i, film in enumerate(list_film):
 
 st.title("Trouver le nombre de films dans lequel un acteur à jouer :")
 acteurs = get_acteurs()
+acteurs.insert(0, "")  # Ajouter une option vide en première position
 acteur_selectionne = st.selectbox('Sélectionnez un acteur', acteurs)
 
 if acteur_selectionne:
@@ -56,7 +57,7 @@ if acteur_selectionne:
 
 st.title("Trouver les 3 meilleurs films par genre :")
 genres = get_genres()
-
+genres.insert(0, "")  # Ajouter une option vide en première position
 selected_genre = st.selectbox("Sélectionnez un genre", genres)
 if selected_genre:
     films = trois_meilleurs_films_genre(selected_genre)
@@ -128,7 +129,7 @@ def infos_film(titre):
 
 # Affichage de la liste déroulante et des informations du film sélectionné
 st.title("Sélection des infos d'un film")
+titres.insert(0, "")  # Ajouter une option vide en première position
 titre_selectionne = st.selectbox("Sélectionnez un titre de film", titres)
 if titre_selectionne:
     infos_film(titre_selectionne)
-
