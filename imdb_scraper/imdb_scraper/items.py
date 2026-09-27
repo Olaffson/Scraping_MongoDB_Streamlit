@@ -3,6 +3,8 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
+import re
+
 import scrapy
 
 
@@ -20,8 +22,15 @@ class ImdbScraperItem(scrapy.Item):
     
 
 def convert_duration_to_minutes(duration):
-    hours, minutes = duration.split('h ')
-    hours = int(hours)
-    minutes = int(minutes[:-1])
-    total_minutes = hours * 60 + minutes
-    return total_minutes
+    """
+    Convertit une durée IMDb (« 2h 22m », « 2h », « 45m ») en nombre de minutes.
+
+    Renvoie None si la durée est absente ou dans un format inconnu.
+    """
+    if not duration:
+        return None
+    heures = re.search(r'(\d+)\s*h', duration)
+    minutes = re.search(r'(\d+)\s*m', duration)
+    if not heures and not minutes:
+        return None
+    return (int(heures.group(1)) * 60 if heures else 0) + (int(minutes.group(1)) if minutes else 0)
