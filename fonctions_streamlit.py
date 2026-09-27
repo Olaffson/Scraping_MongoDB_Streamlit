@@ -37,7 +37,7 @@ def get_acteurs():
 
 # Fonction pour trouver les trois meilleurs films d'un genre donné
 def trois_meilleurs_films_genre(genre):
-    result = collection.find({'genres': {'$regex': genre, '$options': 'i'}}).sort('score', pymongo.DESCENDING).limit(3)
+    result = collection.find({'genre': {'$regex': genre, '$options': 'i'}}).sort('score', pymongo.DESCENDING).limit(3)
     films = []
     for r in result:
         films.append(r['titre'])
@@ -51,8 +51,8 @@ def get_genres():
 # Fonction pour trouver la durée moyenne d'un film pour un genre donné
 def duree_moyenne_genre(genre):
     result = collection.aggregate([
-        {'$match': {'genres': {'$regex': genre, '$options': 'i'}}},
-        {'$group': {'_id': '$genres', 'duree_moyenne': {'$avg': '$duree'}}}
+        {'$match': {'genre': {'$regex': genre, '$options': 'i'}}},
+        {'$group': {'_id': '$genre', 'duree_moyenne': {'$avg': '$duree'}}}
     ])
     for r in result:
         return r['duree_moyenne']
