@@ -1,7 +1,6 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-import csv
 from ..items import ImdbScraperItem, convert_duration_to_minutes, convertir_score
 
 

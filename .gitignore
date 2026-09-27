@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environnements virtuels
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Variables d'environnement (clé de connexion à MongoDB Atlas)
+.env
+
+# Cache HTTP de Scrapy
+.scrapy/
