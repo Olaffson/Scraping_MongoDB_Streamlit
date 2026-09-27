@@ -2,7 +2,7 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 import csv
-from ..items import ImdbScraperItem, convert_duration_to_minutes
+from ..items import ImdbScraperItem, convert_duration_to_minutes, convertir_score
 
 
 class CrawlerImdbSpiderSerie(CrawlSpider):
@@ -41,7 +41,7 @@ class CrawlerImdbSpiderSerie(CrawlSpider):
         items['acteurs'] = acteurs
         items['pays'] = pays
         items['public'] = public
-        items['score'] = score
+        items['score'] = convertir_score(score)
         items['genre'] = genre
         items['description'] = description
         items['duree'] = duree

@@ -34,3 +34,11 @@ def convert_duration_to_minutes(duration):
     if not heures and not minutes:
         return None
     return (int(heures.group(1)) * 60 if heures else 0) + (int(minutes.group(1)) if minutes else 0)
+
+
+def convertir_score(score):
+    """Convertit la note IMDb scrapée (texte, par exemple « 9.3 ») en nombre, ou None si elle est absente."""
+    try:
+        return float(score)
+    except (TypeError, ValueError):
+        return None
