@@ -28,5 +28,9 @@ class ImdbScraperPipeline:
         self.collection = self.db_film[spider.collection_mongo]
 
     def process_item(self, item, spider):
-        self.collection.insert_one(dict(item))
+        # mise à jour du film ou de la série s'il est déjà en base (même titre et même année), ajout sinon :
+        # relancer le scraping ne crée pas de doublons
+        donnees = dict(item)
+        self.collection.update_one({'titre': donnees['titre'], 'annee': donnees['annee']},
+                                   {'$set': donnees}, upsert=True)
         return item
