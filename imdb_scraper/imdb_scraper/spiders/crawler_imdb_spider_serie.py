@@ -8,11 +8,15 @@ from ..items import ImdbScraperItem, convert_duration_to_minutes
 class CrawlerImdbSpiderSerie(CrawlSpider):
     name = "crawler_imdb_spider_serie"
     allowed_domains = ["www.imdb.com"]
-    start_urls = ["http://www.imdb.com/"]
 
     rules = (Rule(LinkExtractor(restrict_xpaths="//td[@class='titleColumn']/a"), callback="parse", follow=False),)
 
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'
+
+    async def start(self):
+        # point d'entrée depuis Scrapy 2.13, qui ignore start_requests() quand start() n'est pas défini
+        for request in self.start_requests():
+            yield request
 
     def start_requests(self):
         yield scrapy.Request(url='https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250', headers={
