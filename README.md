@@ -1,7 +1,83 @@
-# Scraping_MongoDB_Streamlit
-scraping de donnees sur imdb
+# Scraping IMDb, MongoDB et Streamlit
 
-description du brief
+Base de données personnelle de films et de séries :
+
+1. les films et séries du **top 250 d'IMDb** sont récupérés avec **Scrapy** ;
+2. ils sont enregistrés dans une base **MongoDB Atlas** et dans des fichiers CSV ;
+3. un **notebook** répond aux questions du sujet avec pymongo ;
+4. une application **Streamlit** affiche les réponses et permet des recherches.
+
+## Contenu du dépôt
+
+| Fichier / dossier | Contenu |
+|---|---|
+| `imdb_scraper/` | Projet Scrapy |
+| `imdb_scraper/imdb_scraper/spiders/crawler_imdb_spider_film.py` | Spider du top 250 des films |
+| `imdb_scraper/imdb_scraper/spiders/crawler_imdb_spider_serie.py` | Spider du top 250 des séries |
+| `imdb_scraper/imdb_scraper/items.py` | Champs récupérés et conversions (durée en minutes, note) |
+| `imdb_scraper/imdb_scraper/pipelines.py` | Enregistrement dans MongoDB, sans doublons |
+| `imdb_scraper/film.csv`, `imdb_scraper/serie.csv` | Données récupérées |
+| `imdb.ipynb` | Réponses aux questions avec pymongo |
+| `app.py` | Application Streamlit |
+| `fonctions_streamlit.py` | Requêtes MongoDB utilisées par l'application |
+
+## Installation
+
+Le projet nécessite Python 3.11 ou plus récent.
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Configuration
+
+Créez un fichier `.env` à la racine du dépôt avec l'adresse de connexion à votre base MongoDB Atlas :
+
+```
+ATLAS_KEY=mongodb+srv://<utilisateur>:<mot_de_passe>@<cluster>.mongodb.net/
+```
+
+Ce fichier contient votre mot de passe : il est ignoré par Git (`.gitignore`) et ne doit jamais être publié. N'affichez pas non plus la clé dans le notebook.
+
+Les données sont enregistrées dans la base `myfilms` : collection `film_table` pour les films, `serie_table` pour les séries.
+
+## Scraping
+
+Depuis le dossier `imdb_scraper` :
+
+```bash
+# films : enregistrés dans MongoDB (film_table) et dans film.csv
+scrapy crawl crawler_imdb_spider_film -O film.csv
+
+# séries : enregistrées dans MongoDB (serie_table) et dans serie.csv
+scrapy crawl crawler_imdb_spider_serie -O serie.csv
+```
+
+Relancer un spider met à jour les films et séries déjà en base (même titre et même année) au lieu de les ajouter une nouvelle fois.
+
+Les pages téléchargées sont gardées en cache dans `imdb_scraper/.scrapy/` (`HTTPCACHE_ENABLED` dans `settings.py`) : les lancements suivants réutilisent ces pages au lieu de solliciter IMDb. Pour récupérer des données à jour, supprimez ce dossier avant de relancer le spider.
+
+## Notebook
+
+`imdb.ipynb` répond aux questions du sujet (film le plus long, films les mieux notés, films par acteur, meilleurs films par genre, pays des 100 films les mieux notés, durée moyenne par genre) en interrogeant la base MongoDB avec pymongo.
+
+## Application
+
+Depuis la racine du dépôt :
+
+```bash
+streamlit run app.py
+```
+
+## Limites connues
+
+- Les sélecteurs des spiders correspondent aux pages d'IMDb d'avril 2023. IMDb a depuis modifié la structure de ses pages, notamment celle du top 250 : les spiders sont probablement à adapter.
+- Pour environ un tiers des séries, les acteurs ne sont pas récupérés : leurs pages n'ont pas toutes la même structure.
+- Seuls les 3 premiers acteurs de chaque film sont récupérés : les comptages par acteur ne portent que sur ces rôles principaux.
+
+## Sujet
 
 Projet : Récupérer des données et créer votre application
 
@@ -174,5 +250,3 @@ Code review du scraper
 Démonstration de l’application
 Conclusion sous forme d’ouverture sur le sujet suivant : Comment pourriez-vous utiliser vos compétences de scraping pour servir les besoins d’un société/association ? (donner un exemple)
 Difficultés rencontrées et pistes d’amélioration
-
-
