@@ -47,8 +47,8 @@ genre = get_genres()
 
 selected_genre = st.selectbox("Sélectionnez un genre", genre)
 if selected_genre:
-    films = trois_meilleurs_films_genre(genre)
-    st.write(f"Les trois meilleurs films du genre {genre} sont :")
+    films = trois_meilleurs_films_genre(selected_genre)
+    st.write(f"Les trois meilleurs films du genre {selected_genre} sont :")
     for i, film in enumerate(films):
         st.write(f"{i+1}. {film}")
 else:
