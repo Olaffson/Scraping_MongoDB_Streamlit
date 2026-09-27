@@ -2,17 +2,23 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 import csv
-from ..items import ImdbScraperItem, convert_duration_to_minutes
+from ..items import ImdbScraperItem, convert_duration_to_minutes, convertir_score
 
 
 class CrawlerImdbSpiderSerie(CrawlSpider):
     name = "crawler_imdb_spider_serie"
     allowed_domains = ["www.imdb.com"]
-    start_urls = ["http://www.imdb.com/"]
+    # collection MongoDB où ImdbScraperPipeline enregistre les éléments
+    collection_mongo = "serie_table"
 
     rules = (Rule(LinkExtractor(restrict_xpaths="//td[@class='titleColumn']/a"), callback="parse", follow=False),)
 
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'
+
+    async def start(self):
+        # point d'entrée depuis Scrapy 2.13, qui ignore start_requests() quand start() n'est pas défini
+        for request in self.start_requests():
+            yield request
 
     def start_requests(self):
         yield scrapy.Request(url='https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250', headers={
@@ -26,6 +32,7 @@ class CrawlerImdbSpiderSerie(CrawlSpider):
         titre = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/h1/span/text()").get()
         annee = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[2]/a/text()").get()
         duree = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[4]/text()").get()
+        duree = convert_duration_to_minutes(duree)
         description = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/p/span[3]/text()").get()
         genre = list(set(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a[1]/span/text()").getall()))
         score = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[1]/span[1]/text()").get()
@@ -36,7 +43,7 @@ class CrawlerImdbSpiderSerie(CrawlSpider):
         items['acteurs'] = acteurs
         items['pays'] = pays
         items['public'] = public
-        items['score'] = score
+        items['score'] = convertir_score(score)
         items['genre'] = genre
         items['description'] = description
         items['duree'] = duree

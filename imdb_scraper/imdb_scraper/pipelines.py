@@ -14,12 +14,23 @@ import os
 class ImdbScraperPipeline:
 
     def __init__(self) -> None:
-        load_dotenv(dotenv_path='/home/apprenant/Documents/Projets/imdb/.env')
+        # cherche le fichier .env dans le dossier du projet, puis dans ses dossiers parents
+        load_dotenv()
         ATLAS_KEY = os.getenv('ATLAS_KEY')
+        if not ATLAS_KEY:
+            # sans clé, MongoClient se connecterait silencieusement à un MongoDB local
+            raise ValueError("Variable ATLAS_KEY absente : ajoutez-la dans le fichier .env à la racine du projet")
         self.client = pymongo.MongoClient(ATLAS_KEY)
         self.db_film = self.client['myfilms']
-        self.collection = self.db_film['film_table']
+
+    def open_spider(self, spider):
+        # chaque spider enregistre dans sa propre collection : films et séries ne sont pas mélangés
+        self.collection = self.db_film[spider.collection_mongo]
 
     def process_item(self, item, spider):
-        self.collection.insert_one(dict(item))
+        # mise à jour du film ou de la série s'il est déjà en base (même titre et même année), ajout sinon :
+        # relancer le scraping ne crée pas de doublons
+        donnees = dict(item)
+        self.collection.update_one({'titre': donnees['titre'], 'annee': donnees['annee']},
+                                   {'$set': donnees}, upsert=True)
         return item

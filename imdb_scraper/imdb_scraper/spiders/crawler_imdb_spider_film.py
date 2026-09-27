@@ -2,17 +2,23 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 import csv
-from ..items import ImdbScraperItem, convert_duration_to_minutes
+from ..items import ImdbScraperItem, convert_duration_to_minutes, convertir_score
 
 
 class CrawlerImdbSpiderFilm(CrawlSpider):
     name = "crawler_imdb_spider_film"
     allowed_domains = ["www.imdb.com"]
-    start_urls = ["http://www.imdb.com/"]
+    # collection MongoDB où ImdbScraperPipeline enregistre les éléments
+    collection_mongo = "film_table"
 
     rules = (Rule(LinkExtractor(restrict_xpaths="//td[@class='titleColumn']/a"), callback="parse", follow=False),)
 
     user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36'
+
+    async def start(self):
+        # point d'entrée depuis Scrapy 2.13, qui ignore start_requests() quand start() n'est pas défini
+        for request in self.start_requests():
+            yield request
 
     def start_requests(self):
         yield scrapy.Request(url='https://www.imdb.com/chart/top/?ref_=nv_mv_250', headers={
@@ -37,7 +43,7 @@ class CrawlerImdbSpiderFilm(CrawlSpider):
         items['acteurs'] = acteurs
         items['pays'] = pays
         items['public'] = public
-        items['score'] = score
+        items['score'] = convertir_score(score)
         items['genre'] = genre
         items['description'] = description
         items['duree'] = duree
