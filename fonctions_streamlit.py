@@ -1,6 +1,3 @@
-import streamlit as st
-import requests
-import pandas as pd
 import pymongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -25,7 +22,6 @@ def cinq_films_mieux_notes():
 
 # Fonction pour trouver le nombre de films dans lesquels un acteur a joué
 def nb_films_acteur(acteur):
-    result = collection.find({'acteurs': {'$regex': acteur, '$options': 'i'}})
     count = collection.count_documents({'acteurs': {'$regex': acteur, '$options': 'i'}})
     return count
 
