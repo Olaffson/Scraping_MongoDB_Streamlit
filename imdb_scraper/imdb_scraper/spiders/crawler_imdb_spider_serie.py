@@ -30,6 +30,7 @@ class CrawlerImdbSpiderSerie(CrawlSpider):
         titre = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/h1/span/text()").get()
         annee = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[2]/a/text()").get()
         duree = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[4]/text()").get()
+        duree = convert_duration_to_minutes(duree)
         description = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/p/span[3]/text()").get()
         genre = list(set(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a[1]/span/text()").getall()))
         score = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[1]/span[1]/text()").get()
