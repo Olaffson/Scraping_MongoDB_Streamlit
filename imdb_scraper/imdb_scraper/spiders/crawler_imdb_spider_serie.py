@@ -33,11 +33,12 @@ class CrawlerImdbSpiderSerie(CrawlSpider):
         duree = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[4]/text()").get()
         duree = convert_duration_to_minutes(duree)
         description = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/p/span[3]/text()").get()
-        genre = list(set(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a[1]/span/text()").getall()))
+        # dict.fromkeys supprime les doublons en gardant l'ordre de la page (acteurs par ordre d'importance)
+        genre = list(dict.fromkeys(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[1]/div[2]/a[1]/span/text()").getall()))
         score = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[1]/span[1]/text()").get()
         public = response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[3]/a/text()").get()
         pays = response.xpath("//section[@class='ipc-page-section ipc-page-section--base celwidget']/div[2]/ul/li[2]/div/ul/li/a/text()").get()
-        acteurs = list(set(response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[2]/div/ul/li/a/text()").getall()))
+        acteurs = list(dict.fromkeys(response.xpath("/html/body/div[2]/main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[2]/div/ul/li/a/text()").getall()))
 
         items['acteurs'] = acteurs
         items['pays'] = pays
