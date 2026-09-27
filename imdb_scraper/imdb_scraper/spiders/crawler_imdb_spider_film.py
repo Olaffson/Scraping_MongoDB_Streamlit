@@ -36,7 +36,8 @@ class CrawlerImdbSpiderFilm(CrawlSpider):
         score = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[2]/div/div[1]/a/span/div/div[2]/div[1]/span[1]/text()").get()
         public = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/ul/li[2]/a/text()").get()
         pays = response.xpath("//section[@class='ipc-page-section ipc-page-section--base celwidget']/div[2]/ul/li[2]/div/ul/li/a/text()").get()
-        acteurs = list(set(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[3]/div/ul/li/a/text()").getall()))
+        # dict.fromkeys supprime les doublons en gardant l'ordre de la page (acteurs par ordre d'importance)
+        acteurs = list(dict.fromkeys(response.xpath("//main/div/section[1]/section/div[3]/section/section/div[3]/div[2]/div[1]/section/div[2]/div/ul/li[3]/div/ul/li/a/text()").getall()))
         titre = response.xpath("//main/div/section[1]/section/div[3]/section/section/div[2]/div[1]/h1/span/text()").get()
 
         items['acteurs'] = acteurs
