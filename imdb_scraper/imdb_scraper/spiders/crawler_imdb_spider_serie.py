@@ -8,6 +8,8 @@ from ..items import ImdbScraperItem, convert_duration_to_minutes, convertir_scor
 class CrawlerImdbSpiderSerie(CrawlSpider):
     name = "crawler_imdb_spider_serie"
     allowed_domains = ["www.imdb.com"]
+    # collection MongoDB où ImdbScraperPipeline enregistre les éléments
+    collection_mongo = "serie_table"
 
     rules = (Rule(LinkExtractor(restrict_xpaths="//td[@class='titleColumn']/a"), callback="parse", follow=False),)
 

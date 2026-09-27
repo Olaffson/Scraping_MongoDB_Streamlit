@@ -22,7 +22,10 @@ class ImdbScraperPipeline:
             raise ValueError("Variable ATLAS_KEY absente : ajoutez-la dans le fichier .env à la racine du projet")
         self.client = pymongo.MongoClient(ATLAS_KEY)
         self.db_film = self.client['myfilms']
-        self.collection = self.db_film['film_table']
+
+    def open_spider(self, spider):
+        # chaque spider enregistre dans sa propre collection : films et séries ne sont pas mélangés
+        self.collection = self.db_film[spider.collection_mongo]
 
     def process_item(self, item, spider):
         self.collection.insert_one(dict(item))
